@@ -4,18 +4,47 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
+  FlatList,
   TouchableOpacity,
 } from "react-native";
-// import { useSelector, useDispatch } from "react-redux";
-// import type { RootState } from "../../store/store";
-// import { increment, decrement } from "../../store/counterSlice";
 import { useAuth } from "../../contexts/AuthContext";
+import { Feather } from "@expo/vector-icons";
+import * as Animatable from "react-native-animatable";
+import { Button } from "../../components/common/Button";
 
 export default function Home() {
   const { user } = useAuth();
   // const count = useSelector((state: RootState) => state.counter.value);
   // const dispatch = useDispatch();
+
+  const renderEmptyState = () => (
+    <View style={styles.emptyState}>
+      <Feather name="map" size={64} color="#D1D5DB" />
+      <Text style={styles.emptyTitle}>No trips yet</Text>
+      <Text style={styles.emptyText}>
+        Create your first trip to start tracking expenses
+      </Text>
+      <Button
+        title="Create Trip"
+        // onPress={() => navigation.navigate("CreateTrip")}
+        onPress={() => alert("Create Trip")}
+        style={styles.emptyButton}
+        icon={<Feather name="plus" size={20} color="#FFFFFF" />}
+        gradient
+      />
+    </View>
+  );
+  const renderTripCard = () => {
+    return (
+      <View style={styles.tripCardContainer}>
+        <TouchableOpacity style={styles.tripCard}>
+          <Text style={styles.tripHeader}>trip header</Text>
+          <Text style={styles.tripInfo}>trip info here</Text>
+          <Text style={styles.tripName}>trip name here</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -38,25 +67,28 @@ export default function Home() {
           </View>
         </TouchableOpacity>
       </View>
+      <View style={styles.header}>
+        <Text style={styles.title}>Trips</Text>
+      </View>
 
-      {/* <FlatList
-        data={trips}
+      <FlatList
+        data={[]}
         renderItem={renderTripCard}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item: any) => item.id}
         contentContainerStyle={[
           styles.listContainer,
-          trips.length === 0 && styles.emptyListContainer,
+          [].length === 0 && styles.emptyListContainer,
         ]}
         showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            tintColor="#3B82F6"
-          />
-        }
+        // refreshControl={
+        //   <RefreshControl
+        //     refreshing={refreshing}
+        //     onRefresh={onRefresh}
+        //     tintColor="#3B82F6"
+        //   />
+        // }
         ListEmptyComponent={renderEmptyState}
-      /> */}
+      />
 
       {/* <TouchableOpacity
         style={styles.fab}
@@ -84,6 +116,11 @@ const styles = StyleSheet.create({
   },
   greeting: {
     fontSize: 24,
+    fontWeight: "700",
+    color: "#111827",
+  },
+  title: {
+    fontSize: 32,
     fontWeight: "700",
     color: "#111827",
   },
